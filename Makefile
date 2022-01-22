@@ -1,12 +1,10 @@
-LIBS = -lhiredis
-
 all: qtt
 
 %.o: %.c
-	$(CC) -c -o $@ $<
+	$(CC) ${CFLAGS} -c -o $@ $<
 
 qtt: qtt.o
-	$(CC) -o $@ $^ $(LIBS)
+	$(CC) ${CFLAGS} ${LDFLAGS} -o $@ $^
 
 .PHONY: clean
 clean:
