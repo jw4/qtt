@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+say() {
+  echo " [$BASHPID] $*"
+}
+
+while filename=$(qtt); do
+  say "Start processing ${filename}"
+  sleep 1
+done
+
+

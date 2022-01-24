@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+#
+# First enqueue
+#
+
+example_enqueue
+
+#
+# Then start workers
+#
+
+_wait_pids_to_complete() {
+    for pid in $1; do
+        wait "$pid"
+    done
+}
+
+pids=""
+
+for worker in {1..6}; do
+  echo "Starting worker ${worker}"
+  example_worker &
+  pids="$pids $!"
+done
+
+#
+# Then wait til the workers are done
+#
+
+_wait_pids_to_complete "$pids"
+
+echo "Done"

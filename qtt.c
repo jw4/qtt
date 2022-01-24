@@ -18,7 +18,8 @@ int deque(redisContext * ctx, const char * queue, const char * wait,
 int enque(redisContext * ctx, const char * queue, const int argc,
           const char ** argv);
 
-void help(const int optlen, const struct option opts[]);
+void help(const char * invocation, const int optlen,
+          const struct option opts[]);
 
 int
 main(int argc, char ** argv)
@@ -111,7 +112,7 @@ main(int argc, char ** argv)
     }
 
     if (help_flag) {
-        help(sizeof(long_options) / sizeof(long_options[0]), long_options);
+        help(argv[0], sizeof(long_options) / sizeof(long_options[0]), long_options);
         return -1;
     }
 
@@ -226,11 +227,27 @@ enque(redisContext * ctx, const char * queue,
 }
 
 void
-help(const int optlen, const struct option opts[])
+help(const char * invocation, const int optlen, const struct option opts[])
 {
-    fprintf(stderr, "Usage:\n\n");
+    fprintf(stderr, "Usage: %s [flags] [values]\n\n", invocation);
+    fprintf(stderr, " Flags:\n");
 
     for(int ix = 0; ix < optlen; ix++) {
-        fprintf(stderr, "  --%s\n", opts[ix].name);
+        int v = opts[ix].val;
+        fprintf(stderr, "  --%-5s%4s%c%s\n", opts[ix].name,
+                v > 1 ? "| -" : "",
+                v > 1 ? v : ' ',
+                opts[ix].has_arg ? " <arg>" : "");
     }
+
+    fprintf(stderr,
+            "\n\nEnvironment variables can be used for default values:\n"
+            "  REDIS_HOST\n"
+            "  REDIS_PORT\n"
+            "  QTT_QUEUE       (redis key name of the queue)\n"
+            "  QTT_BLOCK_WAIT  (seconds to block while waiting for item in queue)\n");
+    fprintf(stderr,
+            "\n\nWhen no values are passed in %s will block for the configured"
+            " time, waiting for items to appear on the queue.\nWhen values are"
+            " passed, they are added to the queue.\n", invocation);
 }
