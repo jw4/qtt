@@ -1,7 +1,7 @@
 all: qtt
 
 %.o: %.c
-	$(CC) ${CFLAGS} -c -o $@ $< ${LDFLAGS}
+	$(CC) ${CFLAGS} -c -o $@ $<
 
 qtt: qtt.o
 	$(CC) ${CFLAGS} -o $@ $^ ${LDFLAGS}
