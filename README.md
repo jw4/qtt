@@ -2,6 +2,14 @@
 
 ## Dev Environment
 
+### Ubuntu
+
+```
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}/usr/local/lib"
+export LDFLAGS="-lhiredis"
+export CFLAGS="-I/usr/local/include/hiredis"
+```
+
 ### MacOS
 
 ```
